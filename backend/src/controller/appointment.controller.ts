@@ -10,7 +10,7 @@ const router = Router();
 
 router.post("/", createAppointment);
 
-router.put("/", editAppointment);
+router.put("/:id", editAppointment);
 
 router.get("/:id", getAppointment);
 

@@ -8,9 +8,20 @@ export const createAppointment = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(req.body);
-  const appointment = await create(req.body);
-  return appointment;
+  const receivedToken = req.headers?.authorization || null;
+  const verify = verifyToken(receivedToken);
+  if (verify == undefined || verify == null || verify == "") {
+    console.error(`GetUser User : Unauthorized access token`);
+    return res.status(410).json({ error: "Unauthorized access token." });
+  } else {
+    const appointment = await create(req.body);
+    console.log("response", appointment);
+    if (!appointment) {
+      res.redirect("/");
+    } else {
+      res.status(200).json(appointment);
+    }
+  }
 };
 
 export const editAppointment = async (
@@ -18,7 +29,19 @@ export const editAppointment = async (
   res: Response,
   next: NextFunction
 ) => {
-  res.send({ result: "editAppointment" });
+  const receivedToken = req.headers?.authorization || null;
+  const verify = verifyToken(receivedToken);
+  if (verify == undefined || verify == null || verify == "") {
+    console.error(`GetUser User : Unauthorized access token`);
+    return res.status(410).json({ error: "Unauthorized access token." });
+  } else {
+    const appointment = await update({ _id: req.params.id }, req.body);
+    if (!appointment) {
+      res.redirect("/");
+    } else {
+      res.status(200).json(appointment);
+    }
+  }
 };
 
 export const getAppointment = async (
@@ -26,7 +49,19 @@ export const getAppointment = async (
   res: Response,
   next: NextFunction
 ) => {
-  res.send({ result: "getAppointment" });
+  const receivedToken = req.headers?.authorization || null;
+  const verify = verifyToken(receivedToken);
+  if (verify == undefined || verify == null || verify == "") {
+    console.error(`GetUser User : Unauthorized access token`);
+    return res.status(410).json({ error: "Unauthorized access token." });
+  } else {
+    const appointment = await findOne({ _id: req.params.id });
+    if (!appointment) {
+      res.redirect("/");
+    } else {
+      res.status(200).json(appointment);
+    }
+  }
 };
 
 export const getAllAppointment = async (
@@ -34,5 +69,17 @@ export const getAllAppointment = async (
   res: Response,
   next: NextFunction
 ) => {
-  res.send({ result: "getAllAppointment" });
+  const receivedToken = req.headers?.authorization || null;
+  const verify = verifyToken(receivedToken);
+  if (verify == undefined || verify == null || verify == "") {
+    console.error(`GetUser User : Unauthorized access token`);
+    return res.status(410).json({ error: "Unauthorized access token." });
+  } else {
+    const appointment = await findAll({});
+    if (!appointment) {
+      res.redirect("/");
+    } else {
+      res.status(200).json(appointment);
+    }
+  }
 };

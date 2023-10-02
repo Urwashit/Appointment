@@ -13,10 +13,9 @@ export const update = async (
   query: FilterQuery<AppointmentInterface>,
   update: AppointmentInterface
 ) => {
-  return await Appointment.findOneAndUpdate(query, update);
+  return await Appointment.findOneAndUpdate(query, update, { new: true });
 };
 
 export const create = async (update: AppointmentInterface) => {
-  console.log(update);
   return await Appointment.create(update);
 };
