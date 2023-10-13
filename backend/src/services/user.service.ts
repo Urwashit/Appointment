@@ -15,12 +15,12 @@ export const login = async (
   if (userFound) {
     if (password === userFound.password) {
       const token = getToken(userFound);
-      res.status(200).json({ accessToken: token, user: userFound });
+      return res.status(200).json({ accessToken: token, user: userFound });
     } else {
-      res.status(400).json({ error: "Wrong credentials." });
+      return res.status(400).json({ error: "Wrong credentials." });
     }
   } else {
-    res.status(400).json({ error: "User doesn't exist" });
+    return res.status(404).json({ error: "User doesn't exist" });
   }
 };
 
@@ -37,9 +37,9 @@ export const getUser = async (
   } else {
     const user = await findOne({ _id: req.params.id });
     if (!user) {
-      res.redirect("/");
+      return res.status(404).json({ error: "User doesn't exist" });
     } else {
-      res.status(200).json(user);
+      return res.status(200).json(user);
     }
   }
 };
@@ -49,10 +49,9 @@ export const signup = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { name, emailId, password } = req.body;
-
+  const { name, email, password } = req.body;
   const userFound = await findOne({
-    $or: [{ email: emailId.toLowerCase() }],
+    $or: [{ email: email.toLowerCase() }],
   });
 
   if (userFound) {
@@ -61,12 +60,13 @@ export const signup = async (
       .status(400)
       .json({ error: `User with given email and phone number alredy exists` });
   }
-
   const user = await create({
     name,
-    email: emailId.toLowerCase(),
+    email: email.toLowerCase(),
     password,
   });
 
-  return res.status(200).json(user);
+  const token = getToken(user);
+
+  return res.status(200).json({ accessToken: token, user });
 };

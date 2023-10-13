@@ -3,7 +3,8 @@ import {
   createAppointment,
   editAppointment,
   getAllAppointment,
-  getAppointment,
+  getAllAppointmentByDoctorId,
+  getAppointmentByQuery,
 } from "../services/appointment.service";
 
 const router = Router();
@@ -12,7 +13,7 @@ router.post("/", createAppointment);
 
 router.put("/:id", editAppointment);
 
-router.get("/:id", getAppointment);
+router.get("/query", getAppointmentByQuery);
 
 router.get("/", getAllAppointment);
 

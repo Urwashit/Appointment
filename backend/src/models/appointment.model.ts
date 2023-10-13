@@ -11,6 +11,12 @@ export interface AppointmentInterface extends Document {
   appointmentStatus: string;
 }
 
+export enum Status {
+  OPEN = "Open",
+  CANCELLED = "Cancelled",
+  CLOSED = "Closed",
+}
+
 // 2. Create a Schema corresponding to the document interface.
 const appointmentSchema = new Schema<AppointmentInterface>({
   appointmentDate: { type: String, required: true },
@@ -19,7 +25,12 @@ const appointmentSchema = new Schema<AppointmentInterface>({
   patientName: { type: String, required: true },
   patientEmail: { type: String, required: true },
   patientPhone: { type: Number, required: true },
-  appointmentStatus: { type: String, required: true },
+  appointmentStatus: {
+    type: String,
+    enum: Status,
+    required: true,
+    default: "Open",
+  },
 });
 
 // 3. Create a Model.

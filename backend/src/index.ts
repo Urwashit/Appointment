@@ -10,10 +10,9 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(cors());
 app.use("/user", userRoutes); // This means all route path preceed this path
 app.use("/appointment", appointmentRoute);
 app.use("/doctor", doctorRoute);
