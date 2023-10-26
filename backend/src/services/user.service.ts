@@ -29,18 +29,18 @@ export const getUser = async (
   next: NextFunction
 ) => {
   const receivedToken = req.headers?.authorization || null;
-  const verify = verifyToken(receivedToken);
-  if (verify == undefined || verify == null || verify == "") {
-    console.error(`GetUser User : Unauthorized access token`);
-    return res.status(410).json({ error: "Unauthorized access token." });
+  // const verify = verifyToken(receivedToken);
+  // if (verify == undefined || verify == null || verify == "") {
+  //   console.error(`GetUser User : Unauthorized access token`);
+  //   return res.status(410).json({ error: "Unauthorized access token." });
+  // } else {
+  const user = await findOne({ _id: req.params.id });
+  if (!user) {
+    return res.status(404).json({ error: "User doesn't exist" });
   } else {
-    const user = await findOne({ _id: req.params.id });
-    if (!user) {
-      return res.status(404).json({ error: "User doesn't exist" });
-    } else {
-      return res.status(200).json(user);
-    }
+    return res.status(200).json(user);
   }
+  // }
 };
 
 export const signup = async (
