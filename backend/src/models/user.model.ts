@@ -5,6 +5,8 @@ export interface UserInterface extends Document {
   name: string;
   email: string;
   password: string;
+  address: string;
+  phoneNo: number;
 }
 
 // 2. Create a Schema corresponding to the document interface.
@@ -12,6 +14,8 @@ const userSchema = new Schema<UserInterface>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  address: { type: String },
+  phoneNo: { type: Number, unique: true },
 });
 
 // 3. Create a Model.

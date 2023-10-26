@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { User } from "../models/user.model";
 import { getToken, verifyToken } from "./auth.service";
 import { findOne, create } from "../dao/user.dao";
 
@@ -49,9 +48,9 @@ export const signup = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, phoneNo, address } = req.body;
   const userFound = await findOne({
-    $or: [{ email: email.toLowerCase() }],
+    $or: [{ email: email.toLowerCase() }, { phoneNo: phoneNo }],
   });
 
   if (userFound) {
@@ -64,6 +63,8 @@ export const signup = async (
     name,
     email: email.toLowerCase(),
     password,
+    address,
+    phoneNo,
   });
 
   const token = getToken(user);
